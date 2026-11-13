@@ -1,7 +1,13 @@
 {%for juego in juegos%}
     <div>
         <h3>{{ juego.nombre }}</h3>
-        <p>{{ juego.descripcion }}</p>
+        <p>Categoria: {{ juego.categoria.nombre }}</p>
+        <p>Descripción: {{ juego.descripcion }}</p>
+        <p>Edad recomendada: {{ juego.edad_minima }}</p>
+        <p>Stock: {{ juego.stock }}</p>
+        <p>Disponible: {{ juego.disponible }}</p>
         <p>Precio: ${{ juego.precio }}</p>
+        <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+
     </div>
 {%endfor%}
