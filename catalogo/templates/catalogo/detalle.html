@@ -1,13 +1,9 @@
+{% extends 'catalogo/base.html' %}
 {% load catalogo_format %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ juego.nombre }}</title>
-</head>
-<body>
+{% block title %}{{ juego.nombre }} | Tienda de Juegos{% endblock %}
+
+{% block content %}
     <h1>{{ juego.nombre }}</h1>
     <p>{{ juego.descripcion }}</p>
     <p>Categoría: {{ juego.categoria.nombre }}</p>
@@ -21,5 +17,5 @@
     {% if juego.stock == 0 %}
         <p>Producto agotado</p>
     {% endif %}
-</body>
-</html>
+
+{% endblock %}

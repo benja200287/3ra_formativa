@@ -1,34 +1,37 @@
+{% extends 'catalogo/base.html' %}
 {% load catalogo_format %}
 
-<form method="get" action="{% url 'inicio' %}">
-    <label for="buscar-juego">Buscar juegos</label>
-    <input
-        type="search"
-        id="buscar-juego"
-        name="nombre"
-        value="{{ nombre }}"
-        placeholder="Escribe el nombre de un juego"
-    >
-    <label for="categoria">Categoría</label>
-    <select id="categoria" name="categoria">
-        <option value="">Todas las categorías</option>
-        {% for categoria in categorias %}
-            <option value="{{ categoria.id }}" {% if categoria.id|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
-                {{ categoria.nombre }}
-            </option>
-        {% endfor %}
-    </select>
-    <button type="submit">Buscar</button>
-</form>
+{% block content %}
+    <form method="get" action="{% url 'inicio' %}">
+        <label for="buscar-juego">Buscar juegos</label>
+        <input
+            type="search"
+            id="buscar-juego"
+            name="nombre"
+            value="{{ nombre }}"
+            placeholder="Escribe el nombre de un juego"
+        >
+        <label for="categoria">Categoría</label>
+        <select id="categoria" name="categoria">
+            <option value="">Todas las categorías</option>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}" {% if categoria.id|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
+                    {{ categoria.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
 
-{%for juego in juegos%}
-
-    <div>
-        <h3>{{ juego.nombre }}</h3>
-        <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
-        <p>Categoria: {{ juego.categoria.nombre }}</p>
-        <p>Precio: {{ juego.precio|clp }} CLP</p>
-        <a href="{% url 'detalle' juego.id %}">Ver detalles</a>
-
-    </div>
-{%endfor%}
+    {% for juego in juegos %}
+        <article>
+            <h2>{{ juego.nombre }}</h2>
+            <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+            <p>Categoría: {{ juego.categoria.nombre }}</p>
+            <p>Precio: {{ juego.precio|clp }} CLP</p>
+            <a href="{% url 'detalle' juego.id %}">Ver detalles</a>
+        </article>
+    {% empty %}
+        <p>No se encontraron juegos disponibles.</p>
+    {% endfor %}
+{% endblock %}
