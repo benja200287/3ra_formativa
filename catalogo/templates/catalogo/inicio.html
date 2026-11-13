@@ -1,4 +1,18 @@
+
+<form method="get" action="{% url 'inicio' %}">
+    <label for="buscar-juego">Buscar juegos</label>
+    <input
+        type="search"
+        id="buscar-juego"
+        name="nombre"
+        value="{{ nombre }}"
+        placeholder="Escribe el nombre de un juego"
+    >
+    <button type="submit">Buscar</button>
+</form>
+
 {%for juego in juegos%}
+
     <div>
         <h3>{{ juego.nombre }}</h3>
         <p>Categoria: {{ juego.categoria.nombre }}</p>
