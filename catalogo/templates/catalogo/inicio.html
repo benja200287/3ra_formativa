@@ -1,0 +1,7 @@
+{%for juego in juegos%}
+    <div>
+        <h3>{{ juego.nombre }}</h3>
+        <p>{{ juego.descripcion }}</p>
+        <p>Precio: ${{ juego.precio }}</p>
+    </div>
+{%endfor%}
