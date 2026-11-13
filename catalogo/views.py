@@ -17,3 +17,7 @@ def inicio(request):
         'categorias': Categoria.objects.all(),
         'categoria_seleccionada': categorias or '',
     })
+
+def detalle(request, juego_id):
+    juego = Juego.objects.get(id=juego_id)
+    return render(request, 'catalogo/detalle.html', {'juego': juego})

@@ -1,0 +1,25 @@
+{% load catalogo_format %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ juego.nombre }}</title>
+</head>
+<body>
+    <h1>{{ juego.nombre }}</h1>
+    <p>{{ juego.descripcion }}</p>
+    <p>Categoría: {{ juego.categoria.nombre }}</p>
+    <p>Edad recomendada: {{ juego.edad_minima }}</p>
+    <p>Stock: {{ juego.stock }}</p>
+    <p>Disponible: {{ juego.disponible }}</p>
+    <p>Precio: {{ juego.precio|clp }} CLP</p>
+    <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+    <a href="{% url 'inicio' %}">Volver al catálogo</a>
+
+    {% if juego.stock == 0 %}
+        <p>Producto agotado</p>
+    {% endif %}
+</body>
+</html>

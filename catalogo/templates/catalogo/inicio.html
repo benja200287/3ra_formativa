@@ -1,3 +1,4 @@
+{% load catalogo_format %}
 
 <form method="get" action="{% url 'inicio' %}">
     <label for="buscar-juego">Buscar juegos</label>
@@ -24,13 +25,10 @@
 
     <div>
         <h3>{{ juego.nombre }}</h3>
-        <p>Categoria: {{ juego.categoria.nombre }}</p>
-        <p>Descripción: {{ juego.descripcion }}</p>
-        <p>Edad recomendada: {{ juego.edad_minima }}</p>
-        <p>Stock: {{ juego.stock }}</p>
-        <p>Disponible: {{ juego.disponible }}</p>
-        <p>Precio: ${{ juego.precio }}</p>
         <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+        <p>Categoria: {{ juego.categoria.nombre }}</p>
+        <p>Precio: {{ juego.precio|clp }} CLP</p>
+        <a href="{% url 'detalle' juego.id %}">Ver detalles</a>
 
     </div>
 {%endfor%}
