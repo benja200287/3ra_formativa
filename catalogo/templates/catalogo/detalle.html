@@ -12,10 +12,17 @@
     <p>Disponible: {{ juego.disponible }}</p>
     <p>Precio: {{ juego.precio|clp }} CLP</p>
     <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
-    <a href="{% url 'inicio' %}">Volver al catálogo</a>
+    
 
-    {% if juego.stock == 0 %}
+    {% if juego.stock > 0 %}
+        <p>Producto disponible</p>
+        <a href="{% url 'pedido' juego.id %}">Realizar pedido</a>
+    {% else %}
         <p>Producto agotado</p>
     {% endif %}
+
+<br>
+    <a href="{% url 'inicio' %}">Volver al catálogo</a>
+</br>
 
 {% endblock %}
