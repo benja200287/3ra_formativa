@@ -51,10 +51,14 @@ def pedido(request, juego_id):
                         telefono_cliente=form.cleaned_data['telefono_cliente'],
                         cantidad=cantidad,
                     )
+
+                    total_precio = pedido.juego.precio * pedido.cantidad
                     juego.stock -= cantidad
                     if juego.stock == 0:
                         juego.disponible = False
                     juego.save(update_fields=['stock', 'disponible'])
+                    return render(request, 'catalogo/pedido_exitoso.html', {'pedido': pedido, 'total_precio': total_precio})
+                
                   
     else:
         form = PedidoForm()

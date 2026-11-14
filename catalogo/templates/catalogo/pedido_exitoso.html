@@ -1,0 +1,13 @@
+{% extends 'catalogo/base.html' %}
+{% load catalogo_format %}
+{% block content %}
+    <h1>Pedido realizado con éxito</h1>
+    <p>Gracias por tu compra, {{ pedido.nombre_cliente }}. Tu pedido ha sido registrado correctamente.</p>
+    <p>Detalles del pedido:</p>
+    <ul>
+        <li>Juego: {{ pedido.juego.nombre }}</li>
+        <li>Cantidad: {{ pedido.cantidad }}</li>
+        <li>Total: {{ total_precio|clp }} CLP</li>
+    </ul>
+    <a href="{% url 'inicio' %}">Volver al catálogo</a>
+{% endblock %}
