@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.db import transaction
+from django.shortcuts import get_object_or_404, render
 from .forms import PedidoForm
 from .models import Juego, Categoria, Pedido
 
@@ -20,23 +21,41 @@ def inicio(request):
     })
 
 def detalle(request, juego_id):
-    juego = Juego.objects.get(id=juego_id)
+    juego = get_object_or_404(Juego, id=juego_id)
     return render(request, 'catalogo/detalle.html', {'juego': juego})
 
 def pedido(request, juego_id):
-    juego = Juego.objects.get(id=juego_id)
+    juego = get_object_or_404(Juego, id=juego_id)
     if request.method == 'POST':
         form = PedidoForm(request.POST)
         if form.is_valid():
-            pedido = Pedido(
-                juego=juego,
-                nombre_cliente=form.cleaned_data['nombre_cliente'],
-                email_cliente=form.cleaned_data['email_cliente'],
-                telefono_cliente=form.cleaned_data['telefono_cliente'],
-                cantidad=form.cleaned_data['cantidad']
-            )
-            pedido.save()
-            return render(request, 'catalogo/pedido_exitoso.html', {'pedido': pedido})
+            cantidad = form.cleaned_data['cantidad']
+            with transaction.atomic():
+                juego = get_object_or_404(
+                    Juego.objects.select_for_update(),
+                    id=juego_id,
+                )
+                if not juego.disponible or cantidad > juego.stock:
+                    if not juego.disponible:
+                        form.add_error(None, 'Este juego no está disponible para pedidos.')
+                    else:
+                        form.add_error(
+                            'cantidad',
+                            f'Solo quedan {juego.stock} unidades disponibles.',
+                        )
+                else:
+                    pedido = Pedido.objects.create(
+                        juego=juego,
+                        nombre_cliente=form.cleaned_data['nombre_cliente'],
+                        email_cliente=form.cleaned_data['email_cliente'],
+                        telefono_cliente=form.cleaned_data['telefono_cliente'],
+                        cantidad=cantidad,
+                    )
+                    juego.stock -= cantidad
+                    if juego.stock == 0:
+                        juego.disponible = False
+                    juego.save(update_fields=['stock', 'disponible'])
+                  
     else:
         form = PedidoForm()
     return render(request, 'catalogo/pedido.html', {'form': form, 'juego': juego})
